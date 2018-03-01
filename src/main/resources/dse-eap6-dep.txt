@@ -1,0 +1,34 @@
+This archive contains script that installs dse-spark-dependencies in your local maven repository.
+
+# Prerequisites
+
+- Apache Maven(tm) installed
+- Spark Application's build file must use local maven repository (SparkBuildExamples already do that)
+- Get the dependancies from DataStax Wiki
+
+# Execution
+
+Run following command to install EAP dse-spark-dependencies in your local maven repository:
+
+```
+./install.sh
+```
+
+# Build Spark Application
+
+Change dse-spark-dependencies version to 6.0.0-eapX, where X is your EAP version. For example, for maven and 6.0.0-eap1 the dependency should look like:
+
+```
+    <dependency>
+      <groupId>com.datastax.dse</groupId>
+      <artifactId>dse-spark-dependencies</artifactId>
+      <version>6.0.0-eap1</version>
+      <scope>provided</scope>
+    </dependency>
+```
+
+SparkBuildExamples contains properties that hold dse-spark-dependencies, for example for maven:
+
+```
+<dse.version>6.0.0-eap1</dse.version>
+```
