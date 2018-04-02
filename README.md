@@ -79,6 +79,7 @@ Italic: Clustering Column
 
 
 ***Edges:***
+
 |visits|offer_used|purchases|
 |--------------|--------------|--------------|
 |date|date|date|
