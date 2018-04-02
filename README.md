@@ -13,28 +13,129 @@ The [DSE Graph Frames] package is a Scala/Java API written to better integrate w
 
 [DSE Graph Frames]: <https://www.datastax.com/dev/blog/dse-graph-frame>
 
-### How to Run 
+## Set-Up 
+
+***Pre Requisites***
+
+This project was designed for use with DSE 6.0. If the DSE 6.0 jars are not yet publically available, you will have to follow the instructions in [this DSE 6.0 EAP installation guide,] located in this repository in the resources directory. 
+
+[dse-eap6-dep.txt]: <https://github.com/pmehra7/dseGraphFrameLoad/blob/master/src/main/resources/dse-eap6-dep.txt>
+
+Moving forward, this README assumes you have successfully set up DSE 6.0. 
 
 ***Build***
 
-Build this project from the parent directory:
+Clone this repository on a machine in an environment you have cloning access:
+
 ```sh
+$ git clone git@github.com:pmehra7/dseGraphFrameLoad.git
+```
+
+Navigate to the parent directory and build this project:
+```sh
+$ cd dseGraphFrameLoad/
 $ mvn clean package
 ```
-This project was designed for use with DSE 6.0. If DSE 6 jars are not in the public repo yet, you will have to follow the instructions in the `dse-eap6-dep.txt` located in the resources directory. 
 
-***Load Data***
+***Download Data***
 
-Get the data from here: https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data and download the following files: transactions, offers, trainHistory and load them into DSEFS
+Download the data from Kaggle: https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data and download the following files: 
 
-Ex: 
+```sh
+transactions.csv
+offers.csv 
+trainHistory.csv
+```
+
+***Load Data into DSEFS***
+ 
 ```sh
 $ dse fs
 $ mkdir data
-$ put /home/chucknorris/transactions.csv /data/
+$ put /path/to/transactions.csv /data/
+$ put /path/to/offers.csv /data/
+$ put /path/to/trainHistory.csv /data/
 ```
 
-***Run Spark Job***
+## How to Run 
+
+***1. Start DSE***
+
+1. In a new terminal window, navigate to your installation of DSE 6.0
+```sh
+$ cd ~/path/to/dse-6.0.0/
+```
+
+2. Start DSE with graph, search, and spark enabled:
+```sh
+$ ./bin/dse cassandra -k -s -g
+```
+
+***2. Create Graph Schema***
+
+*****2.a: Gremlin Console*****
+
+1. In a new terminal window, navigate to your installation of DSE 6.0
+```sh
+$ cd ~/path/to/dse-6.0.0/
+```
+
+2. Start DSE with graph, search, and spark enabled:
+```sh
+$ ./bin/dse cassandra -k -s -g
+```
+
+3. Start the Gremlin console using the `dse` command and passing the additional command `gremlin-console`:
+```sh
+$ bin/dse gremlin-console
+         \,,,/
+         (o o)
+-----oOOo-(3)-oOOo-----
+plugin activated: tinkerpop.server
+plugin activated: tinkerpop.utilities
+plugin activated: tinkerpop.tinkergraph
+gremlin>
+```
+
+4. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data].
+
+```sh
+gremlin> system.graph('food').create()
+==>null
+```
+
+[Create a new graph]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/graph/using/createGraphGremlin.html> 
+
+[drop the graph schema and data]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/graph/using/dropSchemaDataGremlin.html>
+
+5. On the remote Gremlin Server, set the timeout value to max. Use this setting to ensure that script processing will complete.
+
+```sh
+gremlin> :remote config timeout max 
+```
+
+6. Run `schema.groovy` from the resources directory to create the graph schema. 
+```sh
+gremlin> :load /path/to/dseGraphFrameLoad/src/main/resources/schema.groovy
+```
+
+*****2.b: DSE Studio Notebook*****
+
+Instead of using the gremlin console, you can:
+1. Install and open a [DSE Studio Notebook]
+2. Create a [new graph configuration through the Studio UI]
+3. Copy and paste the schema creation statements from the [schema.groovy] file into a studio cell
+4. Execute the code against the server from studio
+
+[DSE Studio Notebook]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/studioGettingStarted.html>
+
+[new graph configuration through the Studio UI]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/createConnectionNotebook.html>
+
+[schema.groovy]:<https://github.com/pmehra7/dseGraphFrameLoad/blob/master/src/main/resources/schema.groovy>
+
+
+***3. Run Spark Job***
+The spark job reads the downloaded Kaggle data files from DSEFS, builds the required data frames, and loads the data into DSE Graph via the DataStax GraphFrames. To understand how to use DSE GraphFrames, please read [DSE Graph Frames].
 
 Submit the spark job with: 
 
@@ -49,14 +150,9 @@ $ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT
 
 ### Graph Model 
 
-***Create Schema***
-
-Run `schema.grooxy` in the resources directory to create the graph schema. This can be run in DataStax Studio or in the Gremlin console. 
-
 ***Schema Description***
 
-Here is a diagram showing the schema:
-
+Here is a diagram showing the graph's schema:
 
 <p align="center">
     <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
@@ -69,6 +165,7 @@ Italic: Clustering Column
 
 ***Vertices:***
 
+Each vertex label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
@@ -85,7 +182,7 @@ Italic: Clustering Column
 
 
 ***Edges:***
-
+Each edge label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
 |visits|offer_used|purchases|
 |--------------|--------------|--------------|
 |date|date|date|
@@ -93,9 +190,11 @@ Italic: Clustering Column
 | |repeattrips|purchaseamount|
 
 
-### Vertices DataSet
+### Vertices DataFrame
 
-Create a dataset with the desired columns and then create a column name ~label with a value of the respective label. 
+The first key to understanding how to use DSE Graph Frames is to examine the vertex data frame. A vertex data frame requires a column called `~label` all parts of the primary key to be present as columns in the data frame.
+
+For example, to create a data frame for `offers` with the desired columns from the `offer.csv` file:
 
 For example: 
 ```scala
@@ -109,7 +208,7 @@ For example:
     ).withColumn("~label", lit("offer"))
 ```
 
-Here we created a DataSet for the **offer vertex** with the label ~offer. Notice how this matches what is defined in your schema: 
+Here we created a data frame for the **offer vertex** with the label `~offer`. Notice how this matches what is defined in your schema: 
 
 <p align="center">
     <img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
@@ -117,11 +216,19 @@ Here we created a DataSet for the **offer vertex** with the label ~offer. Notice
 
 ### Edges DataSet
 
-To create an Edge DataSet for Customer --> Store, we must add the following columns: srcLabel, dstLabel, edgeLabel. 
+The trickiest key to understanding how to use DSE Graph Frames is to examine the edge data frame. An edge data frame requires:
+
+1. A column called `~label`
+2. A column called `src`
+3. A column called `dst`
+
+To create an Edge DataSet for Customer --> Store, we start by extracting following columns from `transactions.csv`: srcLabel, dstLabel, edgeLabel. 
 
 srcLabel: the label of the originating vertex (in this schema it is customer)
 dstLabel: the label of the destination vertex (in this schema it is store)
 edgeLabel: the label of the edge (in this schema it is visits)
+
+For example: 
 
 ```scala
     val txEdge = transactions.withColumn("srcLabel", lit("customer"))
@@ -129,6 +236,7 @@ edgeLabel: the label of the edge (in this schema it is visits)
     .withColumn("dstLabel", lit("store"))
     .withColumn("edgeLabel", lit("visits"))
 ```
+
 Here we create the edge DataSet that will be written to the graph. We use a DSE GraphFrames method that takes the srcLabel and primary key values of the source vertex, Customer, to create the  src value for the given edge. The same is done for the dstLabel. After, we select the edge label and the edge property columns. 
 
 ```scala
@@ -138,4 +246,7 @@ Here we create the edge DataSet that will be written to the graph. We use a DSE 
     col("edgeLabel") as "~label", 
     col("date") as "date")
 ```
+
+### Examples
+
 Let's run through this example for customer 86246. In the spark repl, we type `custToStore.select("src").limit(1)`. The result is some seeminly arbitary value like: *customer:AAAACTEwMzk4NTI0Ng==*. This is a Spark/DSE Graph Frames id that is created based off of the customer_e PK. The dst value is calculated in a similar way. Then the ~label value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
