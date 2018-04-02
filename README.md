@@ -65,16 +65,17 @@ Italic: Clustering Column
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
-|**company**| |market|category|
+|**company**|-|market|category|
+
 |**brand**| | |quantity|
 |*dept*| | |company|
 |*category*| | |offervalue|
 |productsize| | |brand|
-|productmeasure| | | | 
-|purchasequantity| | | | 
-|purchaseamount| | | | 
-|customer_id| | | | 
-|date| | | | 
+|productmeasure|
+|purchasequantity|
+|purchaseamount|
+|customer_id|
+|date|
 
 
 ***Edges:***
@@ -83,6 +84,7 @@ Italic: Clustering Column
 |date|date|date|
 | |repeater|purchasequantity|
 | |repeattrips|purchaseamount|
+
 
 ### Vertices DataSet
 
