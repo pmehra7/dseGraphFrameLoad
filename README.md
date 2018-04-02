@@ -58,12 +58,13 @@ Run `schema.grooxy` in the resources directory to create the graph schema. This 
 Here is a diagram showing the schema:
 
 
-Bold: Partition Key
-Italic: Clustering Column
-
 <p align="center">
     <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
 </p>
+
+Bold: Partition Key
+
+Italic: Clustering Column
 
 
 ***Vertices:***
