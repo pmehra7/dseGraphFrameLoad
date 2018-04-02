@@ -31,7 +31,9 @@ Ex:
 ```sh
 $ dse fs
 $ mkdir data
-$ put /home/chucknorris/transactions.csv /data/
+$ put /path/to/transactions.csv /data/
+$ put /path/to/offers.csv /data/
+$ put /path/to/trainHistory.csv /data/
 ```
 
 ***Run Spark Job***
