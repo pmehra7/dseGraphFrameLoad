@@ -58,6 +58,7 @@ Here is a diagram showing the schema:
 Bold: Partition Key
 Italic: Clustering Column
 
+<br><br>
 
 ***Vertices:***
 |Product|Customer|Store|Offer|
