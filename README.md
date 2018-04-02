@@ -56,17 +56,21 @@ Here is a diagram showing the schema:
 Bold: Partition Key
 Italic: Clustering Column
 
+<p align="center">
+    <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
+</p>
+
 
 ***Vertices:***
 |Product|Customer|Store|Offer|
-|--------------|--------------|--------------|--------------|
+|-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
 |**company**| |market|category|
 |**brand**| | |quantity|
 |*dept*| | |company|
 |*category*| | |offervalue|
 |productsize| | |brand|
-|productmeasure|  | | | 
+|productmeasure| | | | 
 |purchasequantity| | | | 
 |purchaseamount| | | | 
 |customer_id| | | | 
@@ -98,9 +102,9 @@ For example:
 
 Here we created a DataSet for the **offer vertex** with the label ~offer. Notice how this matches what is defined in your schema: 
 
-
-<img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
-
+<p align="center">
+    <img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
+</p>
 
 ### Edges DataSet
 
