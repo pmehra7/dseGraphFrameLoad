@@ -52,13 +52,13 @@ Run `schema.grooxy` in the resources directory to create the graph schema. This 
 ***Schema Description***
 Here is a diagram showing the schema:
 
+<dl>
 <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
-
+</dl>
 
 Bold: Partition Key
 Italic: Clustering Column
 
-<br><br>
 
 ***Vertices:***
 |Product|Customer|Store|Offer|
