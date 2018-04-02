@@ -68,11 +68,11 @@ Italic: Clustering Column
 |*dept*| | |company|
 |*category*| | |offervalue|
 |productsize| | |brand|
-|productmeasure| 
-|purchasequantity|
-|purchaseamount|
-|customer_id|
-|date|
+|productmeasure|  | | | 
+|purchasequantity| | | | 
+|purchaseamount| | | | 
+|customer_id| | | | 
+|date| | | | 
 
 
 ***Edges:***
