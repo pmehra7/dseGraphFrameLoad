@@ -16,6 +16,7 @@ The [DSE Graph Frames] package is a Scala/Java API written to better integrate w
 ### How to Run 
 
 ***Build***
+
 Build this project from the parent directory:
 ```sh
 $ mvn clean package
@@ -23,6 +24,7 @@ $ mvn clean package
 This project was designed for use with DSE 6.0. If DSE 6 jars are not in the public repo yet, you will have to follow the instructions in the `dse-eap6-dep.txt` located in the resources directory. 
 
 ***Load Data***
+
 Get the data from here: https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data and download the following files: transactions, offers, trainHistory and load them into DSEFS
 
 Ex: 
@@ -33,6 +35,7 @@ $ put /home/checknorris/transactions.csv /data/
 ```
 
 ***Run Spark Job***
+
 Submit the spark job with: 
 
 ```sh
@@ -47,9 +50,11 @@ $ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT
 ### Graph Model 
 
 ***Create Schema***
+
 Run `schema.grooxy` in the resources directory to create the graph schema. This can be run in DataStax Studio or in the Gremlin console. 
 
 ***Schema Description***
+
 Here is a diagram showing the schema:
 
 
@@ -133,4 +138,3 @@ Here we create the edge DataSet that will be written to the graph. We use a DSE 
     col("date") as "date")
 ```
 Let's run through this example for customer 86246. In the spark repl, we type `custToStore.select("src").limit(1)`. The result is some seeminly arbitary value like: *customer:AAAACTEwMzk4NTI0Ng==*. This is a Spark/DSE Graph Frames id that is created based off of the customer_e PK. The dst value is calculated in a similar way. Then the ~label value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
-
