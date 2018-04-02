@@ -52,9 +52,6 @@ Run `schema.grooxy` in the resources directory to create the graph schema. This 
 ***Schema Description***
 Here is a diagram showing the schema:
 
-<p align="center">
-    <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
-</p>
 
 Bold: Partition Key
 Italic: Clustering Column
