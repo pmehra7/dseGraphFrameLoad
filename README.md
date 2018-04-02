@@ -47,16 +47,6 @@ offers.csv
 trainHistory.csv
 ```
 
-***4. Load Data into DSEFS***
- 
-```sh
-$ dse fs
-$ mkdir data
-$ put /path/to/transactions.csv /data/
-$ put /path/to/offers.csv /data/
-$ put /path/to/trainHistory.csv /data/
-```
-
 ## B. How to Run 
 
 ***1. Start DSE***
@@ -66,14 +56,24 @@ $ put /path/to/trainHistory.csv /data/
 $ cd ~/path/to/dse-6.0.0/
 ```
 
-2. Start DSE with graph, search, and spark enabled:
+***2. Load Data into DSEFS***
+ 
+```sh
+$ dse fs
+$ mkdir data
+$ put /path/to/transactions.csv /data/
+$ put /path/to/offers.csv /data/
+$ put /path/to/trainHistory.csv /data/
+```
+
+3. Start DSE with graph, search, and spark enabled:
 ```sh
 $ ./bin/dse cassandra -k -s -g
 ```
 
-***2. Create Graph Schema***
+***3. Create Graph Schema***
 
-*****2.a: Gremlin Console*****
+*****3.a: Gremlin Console*****
 
 1. In a new terminal window, navigate to your installation of DSE 6.0
 ```sh
@@ -119,7 +119,7 @@ gremlin> :remote config timeout max
 gremlin> :load /path/to/dseGraphFrameLoad/src/main/resources/schema.groovy
 ```
 
-*****2.b: DSE Studio Notebook*****
+*****3.b: DSE Studio Notebook*****
 
 Instead of using the gremlin console, you can:
 1. Install and open a [DSE Studio Notebook]
@@ -134,7 +134,8 @@ Instead of using the gremlin console, you can:
 [schema.groovy]:<https://github.com/pmehra7/dseGraphFrameLoad/blob/master/src/main/resources/schema.groovy>
 
 
-***3. Run Spark Job***
+***4. Run Spark Job***
+
 The spark job reads the downloaded Kaggle data files from DSEFS, builds the required data frames, and loads the data into DSE Graph via the DataStax GraphFrames. To understand how to use DSE GraphFrames, please read [DSE Graph Frames].
 
 Submit the spark job with: 
@@ -148,9 +149,9 @@ I used the following spark submit parameters on m4.4xlarge machines:
 $ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT.jar --executor-memory=22G
 ```
 
-### Graph Model 
+### C. Graph Model
 
-***Schema Description***
+***1. Schema Description***
 
 Here is a diagram showing the graph's schema:
 
@@ -163,7 +164,7 @@ Bold: Partition Key
 Italic: Clustering Column
 
 
-***Vertices:***
+***2. Vertices:***
 
 Each vertex label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
 |Product|Customer|Store|Offer|
@@ -181,7 +182,7 @@ Each vertex label is a column in this table; the properties avaiable on the vert
 |date|
 
 
-***Edges:***
+***3. Edges:***
 Each edge label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
 |visits|offer_used|purchases|
 |--------------|--------------|--------------|
@@ -190,7 +191,7 @@ Each edge label is a column in this table; the properties avaiable on the vertex
 | |repeattrips|purchaseamount|
 
 
-### Vertices DataFrame
+### D. Vertices DataFrame
 
 The first key to understanding how to use DSE Graph Frames is to examine the vertex data frame. A vertex data frame requires a column called `~label` all parts of the primary key to be present as columns in the data frame.
 
@@ -214,7 +215,7 @@ Here we created a data frame for the **offer vertex** with the label `~offer`. N
     <img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
 </p>
 
-### Edges DataSet
+### E. Edges DataFrame
 
 The trickiest key to understanding how to use DSE Graph Frames is to examine the edge data frame. An edge data frame requires:
 
@@ -249,4 +250,22 @@ Here we create the edge DataSet that will be written to the graph. We use a DSE 
 
 ### Examples
 
-Let's run through this example for customer 86246. In the spark repl, we type `custToStore.select("src").limit(1)`. The result is some seeminly arbitary value like: *customer:AAAACTEwMzk4NTI0Ng==*. This is a Spark/DSE Graph Frames id that is created based off of the customer_e PK. The dst value is calculated in a similar way. Then the ~label value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
+Let's run through this example for customer 86246. In the spark repl:
+
+```sh
+$ /navigate/to/dse6.0/
+$ dse spark
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.2.0.10
+      /_/
+
+Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> custToStore.select("src").limit(1) 
+```
+The result is some seeminly arbitary value like: `*customer:AAAACTEwMzk4NTI0Ng==*.` This is a Spark/DSE Graph Frames `id` that is created based off of the `customer_e` primary key. The `dst` value is calculated in a similar way. Then the `~label` value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
