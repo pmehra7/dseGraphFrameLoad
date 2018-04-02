@@ -134,4 +134,3 @@ Here we create the edge DataSet that will be written to the graph. We use a DSE 
 ```
 Let's run through this example for customer 86246. In the spark repl, we type `custToStore.select("src").limit(1)`. The result is some seeminly arbitary value like: *customer:AAAACTEwMzk4NTI0Ng==*. This is a Spark/DSE Graph Frames id that is created based off of the customer_e PK. The dst value is calculated in a similar way. Then the ~label value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
 
-### MlLib Collaborative Filtering Demo 
