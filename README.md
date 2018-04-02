@@ -52,7 +52,7 @@ Run `schema.grooxy` in the resources directory to create the graph schema. This 
 ***Schema Description***
 Here is a diagram showing the schema:
 
-![image](https://image.ibb.co/gbU1En/schema_view.png){:height="25%" width="25%"}
+![test image size](https://image.ibb.co/gbU1En/schema_view.png){:height="25%" width="25%"}
 
 
 Bold: Partition Key
