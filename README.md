@@ -62,11 +62,11 @@ Italic: Clustering Column
 
 
 ***Vertices:***
+
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
 |**company**|-|market|category|
-
 |**brand**| | |quantity|
 |*dept*| | |company|
 |*category*| | |offervalue|
