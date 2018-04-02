@@ -72,7 +72,7 @@ Italic: Clustering Column
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
-|**company**|-|market|category|
+|**company**| |market|category|
 |**brand**| | |quantity|
 |*dept*| | |company|
 |*category*| | |offervalue|
