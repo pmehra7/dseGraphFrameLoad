@@ -56,6 +56,11 @@ trainHistory.csv
 $ cd ~/path/to/dse-6.0.0/
 ```
 
+2. Start DSE with graph, search, and spark enabled:
+```sh
+$ ./bin/dse cassandra -k -s -g
+```
+
 ***2. Load Data into DSEFS***
  
 ```sh
@@ -64,11 +69,6 @@ $ mkdir data
 $ put /path/to/transactions.csv /data/
 $ put /path/to/offers.csv /data/
 $ put /path/to/trainHistory.csv /data/
-```
-
-3. Start DSE with graph, search, and spark enabled:
-```sh
-$ ./bin/dse cassandra -k -s -g
 ```
 
 ***3. Create Graph Schema***
