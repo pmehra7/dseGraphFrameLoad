@@ -13,9 +13,9 @@ The [DSE Graph Frames] package is a Scala/Java API written to better integrate w
 
 [DSE Graph Frames]: <https://www.datastax.com/dev/blog/dse-graph-frame>
 
-## Set-Up 
+## A. Set-Up 
 
-***Pre Requisites***
+***1. Pre Requisites***
 
 This project was designed for use with DSE 6.0. If the DSE 6.0 jars are not yet publically available, you will have to follow the instructions in [this DSE 6.0 EAP installation guide,] located in this repository in the resources directory. 
 
@@ -23,7 +23,7 @@ This project was designed for use with DSE 6.0. If the DSE 6.0 jars are not yet 
 
 Moving forward, this README assumes you have successfully set up DSE 6.0. 
 
-***Build***
+***2. Build***
 
 Clone this repository on a machine in an environment you have cloning access:
 
@@ -37,7 +37,7 @@ $ cd dseGraphFrameLoad/
 $ mvn clean package
 ```
 
-***Download Data***
+***3. Download Data***
 
 Download the data from Kaggle: https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data and download the following files: 
 
@@ -47,7 +47,7 @@ offers.csv
 trainHistory.csv
 ```
 
-***Load Data into DSEFS***
+***4. Load Data into DSEFS***
  
 ```sh
 $ dse fs
@@ -57,7 +57,7 @@ $ put /path/to/offers.csv /data/
 $ put /path/to/trainHistory.csv /data/
 ```
 
-## How to Run 
+## B. How to Run 
 
 ***1. Start DSE***
 
