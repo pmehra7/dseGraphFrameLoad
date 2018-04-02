@@ -58,6 +58,7 @@ Here is a diagram showing the schema:
 Bold: Partition Key
 Italic: Clustering Column
 
+
 ***Vertices:***
 |Product|Customer|Store|Offer|
 |--------------|--------------|--------------|--------------|
@@ -72,6 +73,7 @@ Italic: Clustering Column
 |purchaseamount|
 |customer_id|
 |date|
+
 
 ***Edges:***
 |visits|offer_used|purchases|
