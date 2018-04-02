@@ -52,9 +52,7 @@ Run `schema.grooxy` in the resources directory to create the graph schema. This 
 ***Schema Description***
 Here is a diagram showing the schema:
 
-![image](https://image.ibb.co/gbU1En/schema_view.png)
 <img src="https://image.ibb.co/gbU1En/schema_view.png" alt="image" width="40%">
-
 
 
 Bold: Partition Key
@@ -100,7 +98,9 @@ For example:
 
 Here we created a DataSet for the **offer vertex** with the label ~offer. Notice how this matches what is defined in your schema: 
 
-![alt text](https://ibb.co/fT0mfS)
+
+<img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
+
 
 ### Edges DataSet
 
