@@ -111,4 +111,27 @@ Here we created a DataSet for the **offer vertex** with the label ~offer. Notice
 
 ### Edges DataSet
 
+To create an Edge DataSet for Customer --> Store, we must add the following columns: srcLabel, dstLabel, edgeLabel. 
+
+srcLabel: the label of the originating vertex (in this schema it is customer)
+dstLabel: the label of the destination vertex (in this schema it is store)
+edgeLabel: the label of the edge (in this schema it is visits)
+
+```scala
+    val txEdge = transactions.withColumn("srcLabel", lit("customer"))
+    .withColumnRenamed("id", "customer_id")
+    .withColumn("dstLabel", lit("store"))
+    .withColumn("edgeLabel", lit("visits"))
+```
+Here we create the edge DataSet that will be written to the graph. We use a DSE GraphFrames method that takes the srcLabel and primary key values of the source vertex, Customer, to create the  src value for the given edge. The same is done for the dstLabel. After, we select the edge label and the edge property columns. 
+
+```scala
+    val custToStore = txEdge.select(
+    g.idColumn(col("srcLabel"), col("customer_id")) as "src", 
+    g.idColumn(col("dstLabel"), col("chain")) as "dst", 
+    col("edgeLabel") as "~label", 
+    col("date") as "date")
+```
+Let's run through this example for customer 86246. In the spark repl, we type `custToStore.select("src").limit(1)`. The result is some seeminly arbitary value like: *customer:AAAACTEwMzk4NTI0Ng==*. This is a Spark/DSE Graph Frames id that is created based off of the customer_e PK. The dst value is calculated in a similar way. Then the ~label value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
+
 ### MlLib Collaborative Filtering Demo 
