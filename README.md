@@ -46,9 +46,58 @@ $ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT
 
 ### Graph Model 
 
-Run `schema.grooxy` in the resources directory to create the graph schema.
+***Create Schema***
+Run `schema.grooxy` in the resources directory to create the graph schema. This can be run in DataStax Studio or in the Gremlin console. 
+
+***Schema Description***
+Here is a diagram showing the schema:
+
+![image](https://ibb.co/cPaxn7)
+
+Bold: Partition Key
+Italic: Clustering Column
+
+***Vertices:***
+|Product|Customer|Store|Offer|
+|--------------|--------------|--------------|--------------|
+|**chain**|**customer_id**|**chain**|**offer**|
+|**company**| |market|category|
+|**brand**| | |quantity|
+|*dept*| | |company|
+|*category*| | |offervalue|
+|productsize| | |brand|
+|productmeasure| 
+|purchasequantity|
+|purchaseamount|
+|customer_id|
+|date|
+
+***Edges:***
+|visits|offer_used|purchases|
+|--------------|--------------|--------------|
+|date|date|date|
+| |repeater|purchasequantity|
+| |repeattrips|purchaseamount|
 
 ### Vertices DataSet
+
+Create a dataset with the desired columns and then create a column name ~label with a value of the respective label. 
+
+For example: 
+```scala
+    val offers = offer.select(
+      col("offer") as "offer",
+      col("category"),
+      col("quantity"),
+      col("company"),
+      col("offervalue"),
+      col("brand")
+    ).withColumn("~label", lit("offer"))
+```
+
+Here we created a DataSet for the **offer vertex** with the label ~offer. Notice how this matches what is defined in your schema: 
+
+![alt text](https://ibb.co/fT0mfS)
 
 ### Edges DataSet
 
