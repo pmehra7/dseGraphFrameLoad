@@ -75,17 +75,7 @@ $ put /path/to/trainHistory.csv /data/
 
 *****3.a: Gremlin Console*****
 
-1. In a new terminal window, navigate to your installation of DSE 6.0
-```sh
-$ cd ~/path/to/dse-6.0.0/
-```
-
-2. Start DSE with graph, search, and spark enabled:
-```sh
-$ ./bin/dse cassandra -k -s -g
-```
-
-3. Start the Gremlin console using the `dse` command and passing the additional command `gremlin-console`:
+1. Start the Gremlin console using the `dse` command and passing the additional command `gremlin-console`:
 ```sh
 $ bin/dse gremlin-console
          \,,,/
@@ -97,7 +87,7 @@ plugin activated: tinkerpop.tinkergraph
 gremlin>
 ```
 
-4. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data]. In this example, the graph name is `Test_Graph`. If you change the graph name, then rename the graphName variable on line 15 in `App.scala`.
+2. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data]. In this example, the graph name is `Test_Graph`. If you change the graph name, then rename the graphName variable on line 15 in `App.scala`.
 
 ```sh
 gremlin> system.graph('Test_Graph').create()
@@ -108,13 +98,13 @@ gremlin> system.graph('Test_Graph').create()
 
 [drop the graph schema and data]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/graph/using/dropSchemaDataGremlin.html>
 
-5. On the remote Gremlin Server, set the timeout value to max. Use this setting to ensure that script processing will complete.
+3. On the remote Gremlin Server, set the timeout value to max. Use this setting to ensure that script processing will complete.
 
 ```sh
 gremlin> :remote config timeout max 
 ```
 
-6. Run `schema.groovy` from the resources directory to create the graph schema. 
+4. Run `schema.groovy` from the resources directory to create the graph schema. 
 ```sh
 gremlin> :load /path/to/dseGraphFrameLoad/src/main/resources/schema.groovy
 ```
