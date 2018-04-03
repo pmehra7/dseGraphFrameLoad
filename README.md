@@ -97,10 +97,10 @@ plugin activated: tinkerpop.tinkergraph
 gremlin>
 ```
 
-4. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data].
+4. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data]. In this example, the graph name is `Test_Graph`. If you change the graph name, then rename the graphName variable on line 15 in `App.scala`.
 
 ```sh
-gremlin> system.graph('food').create()
+gremlin> system.graph('Test_Graph').create()
 ==>null
 ```
 
