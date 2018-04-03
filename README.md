@@ -136,7 +136,7 @@ Instead of using the gremlin console, you can:
 
 ***4. Run Spark Job***
 
-The spark job reads the downloaded Kaggle data files from DSEFS, builds the required data frames, and loads the data into DSE Graph via the DataStax GraphFrames. To understand how to use DSE GraphFrames, please read [DSE Graph Frames].
+The spark job reads the downloaded Kaggle data files from DSEFS, builds the required dataset, and loads the data into DSE Graph via the DataStax GraphFrames. To understand how to use DSE GraphFrames, please read [DSE Graph Frames].
 
 Submit the spark job with: 
 
@@ -191,11 +191,11 @@ Each edge label is a column in this table; the properties avaiable on the vertex
 | |repeattrips|purchaseamount|
 
 
-### D. Vertices DataFrame
+### D. Vertices Dataset
 
-The first key to understanding how to use DSE Graph Frames is to examine the vertex data frame. A vertex data frame requires a column called `~label` all parts of the primary key to be present as columns in the data frame.
+The first key to understanding how to use DSE Graph Frames is to examine the vertex dataset. A vertex dataset requires a column called `~label` all parts of the primary key to be present as columns in the dataset.
 
-For example, to create a data frame for `offers` with the desired columns from the `offer.csv` file:
+For example, to create a dataset for `offers` with the desired columns from the `offer.csv` file:
 
 For example: 
 ```scala
@@ -209,15 +209,15 @@ For example:
     ).withColumn("~label", lit("offer"))
 ```
 
-Here we created a data frame for the **offer vertex** with the label `~offer`. Notice how this matches what is defined in your schema: 
+Here we created a dataset for the **offer vertex** with the label `~offer`. Notice how this matches what is defined in your schema: 
 
 <p align="center">
     <img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
 </p>
 
-### E. Edges DataFrame
+### E. Edges Dataset
 
-The trickiest key to understanding how to use DSE Graph Frames is to examine the edge data frame. An edge data frame requires:
+The trickiest key to understanding how to use DSE Graph Frames is to examine the edge dataset. An edge dataset requires:
 
 1. A column called `~label`
 2. A column called `src`
