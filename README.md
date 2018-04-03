@@ -56,7 +56,7 @@ trainHistory.csv
 $ cd ~/path/to/dse-6.0.0/
 ```
 
-2. Start DSE with graph, search, and spark enabled:
+2. Start DSE with graph, search, and spark enabled (assuming that you are using a single node tarball version of DSE):
 ```sh
 $ ./bin/dse cassandra -k -s -g
 ```
@@ -167,6 +167,7 @@ Italic: Clustering Column
 ***2. Vertices:***
 
 Each vertex label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
+
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
@@ -183,7 +184,9 @@ Each vertex label is a column in this table; the properties avaiable on the vert
 
 
 ***3. Edges:***
+
 Each edge label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
+
 |visits|offer_used|purchases|
 |--------------|--------------|--------------|
 |date|date|date|
@@ -209,7 +212,7 @@ For example:
     ).withColumn("~label", lit("offer"))
 ```
 
-Here we created a dataset for the **offer vertex** with the label `~offer`. Notice how this matches what is defined in your schema: 
+Here we created a dataset for the **offer vertex** with the label `offer`. Notice how this matches what is defined in your schema: 
 
 <p align="center">
     <img src="https://image.ibb.co/cjEq77/label_description.png" alt="image" width="40%">
@@ -248,9 +251,9 @@ Here we create the edge DataSet that will be written to the graph. We use a DSE 
     col("date") as "date")
 ```
 
-### Examples
+#### Graph Frames idColumn() helper function
 
-Let's run through this example for customer 86246. In the spark repl:
+idColumn() is a helper function. Let's run through this example for customer 86246 to see what it is doing. In the spark repl:
 
 ```sh
 $ /navigate/to/dse6.0/
@@ -268,4 +271,4 @@ Type :help for more information.
 
 scala> custToStore.select("src").limit(1) 
 ```
-The result is some seeminly arbitary value like: `*customer:AAAACTEwMzk4NTI0Ng==*.` This is a Spark/DSE Graph Frames `id` that is created based off of the `customer_e` primary key. The `dst` value is calculated in a similar way. Then the `~label` value, visits, is added to the DataSet and the the properties (which in this case is just the date). 
+The result is some seemingly arbitary value like: `*customer:AAAACTEwMzk4NTI0Ng==*.` This is a Spark/DSE Graph Frames id that is created based off of the `customer_e` primary key. The `dst` value is calculated in a similar way. Then the `~label` value, visits, is added to the DataSet and then the edge properties (which in this case is just the date) are added. 
