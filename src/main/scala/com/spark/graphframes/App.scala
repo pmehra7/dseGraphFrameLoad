@@ -11,6 +11,7 @@ import org.apache.spark.ml.evaluation.RegressionEvaluator
 object App {
   def main(args: Array[String]):Unit = {
 
+    // Change this to the name of your graph
     val graphName = "Test_Graph"
 
     val spark = SparkSession
@@ -23,7 +24,7 @@ object App {
     val g = spark.dseGraph(graphName)
 
 
-    // Create Schemas
+    // Create Schemas for DataSets
     def transactionsSchema():StructType = {
       StructType(Array(
         StructField("id", StringType, true),
@@ -69,25 +70,6 @@ object App {
     val history = spark.sqlContext.read.format("com.databricks.spark.csv").option("header", "true").schema(historySchema).load("dsefs:///data/trainHistory.csv")
 
 
-    // Create Dataframe for Collab. Filtering
-    transactions.createOrReplaceTempView("makeFeatures")
-    val prodList = spark.sql("SELECT row_number() over (order by chain, company, brand, dept, category) as pid, chain, company, brand, dept, category FROM (SELECT DISTINCT chain, company, brand, dept, category FROM makeFeatures) derived")
-    transactions.createOrReplaceTempView("prodList")
-    val features = transactions.join(prodList, Seq("chain", "company", "brand", "dept", "category")).select(col("id"),col("pid"),col("purchasequantity"))
-    val finalFeatures = features.withColumn("id",col("id").cast(IntegerType)).withColumn("purchasequantity",col("purchasequantity").cast(IntegerType)).withColumn("pid",col("pid").cast(IntegerType))
-    // Do Collaborative Filtering
-    val Array(training, test) = finalFeatures.randomSplit(Array(0.8, 0.2))
-    val als = new ALS().setMaxIter(5).setRegParam(0.01).setUserCol("id").setItemCol("pid").setRatingCol("purchasequantity")
-    val model = als.fit(training)
-    model.setColdStartStrategy("drop")
-    val predictions = model.transform(test)
-    val evaluator = new RegressionEvaluator().setMetricName("rmse").setLabelCol("purchasequantity").setPredictionCol("prediction")
-    val rmse = evaluator.evaluate(predictions)
-    println(s"Root-mean-square error = $rmse")
-    // Create 5 recommendations
-    val prodRecsForUser = model.recommendForAllUsers(5)
-
-
     // WRITE OUT VERTICES
 
     // Customer Vertex: Take distinct transactions id and persist
@@ -98,7 +80,7 @@ object App {
     println("\nWriting Customer Vertices")
     g.updateVertices(customers)
 
-    // Offer Vertex: Use the offers DF
+    // Offer Vertex: Use the offers DataSet
     val offers = offer.select(
       col("offer") as "offer",
       col("category"),
@@ -111,7 +93,7 @@ object App {
     println("\nWriting Offer Vertices")
     g.updateVertices(offers)
 
-    // Product Vertex: Use part of the transactions DF
+    // Product Vertex: Use part of the transactions DataSet
     val products = transactions.select(
       col("chain") as "chain",
       col("dept") as "dept",
@@ -144,7 +126,7 @@ object App {
 
     // WRITE OUT EDGES
 
-    // Add some columns to the transactions dataframe
+    // Add some columns to the transactions DataSet
     val txEdge = transactions.withColumn("srcLabel", lit("customer")).withColumnRenamed("id", "customer_id").withColumn("dstLabel", lit("store")).withColumn("edgeLabel", lit("visits"))
     val custToStore = txEdge.select(g.idColumn(col("srcLabel"), col("customer_id")) as "src", g.idColumn(col("dstLabel"), col("chain")) as "dst", col("edgeLabel") as "~label", col("date") as "date")
     println("\nWriting Visit Vertices")
@@ -161,7 +143,24 @@ object App {
     println("\nWriting Purchases Vertices")
     g.updateEdges(custToProduct)
 
-    // COLLABORATIVE FILTERING
+    // COLLABORATIVE FILTERING EXAMPLE 
+    // Can comment out this out if only loading data
+    transactions.createOrReplaceTempView("makeFeatures")
+    val prodList = spark.sql("SELECT row_number() over (order by chain, company, brand, dept, category) as pid, chain, company, brand, dept, category FROM (SELECT DISTINCT chain, company, brand, dept, category FROM makeFeatures) derived")
+    transactions.createOrReplaceTempView("prodList")
+    val features = transactions.join(prodList, Seq("chain", "company", "brand", "dept", "category")).select(col("id"),col("pid"),col("purchasequantity"))
+    val finalFeatures = features.withColumn("id",col("id").cast(IntegerType)).withColumn("purchasequantity",col("purchasequantity").cast(IntegerType)).withColumn("pid",col("pid").cast(IntegerType))
+    // Do Collaborative Filtering
+    val Array(training, test) = finalFeatures.randomSplit(Array(0.8, 0.2))
+    val als = new ALS().setMaxIter(5).setRegParam(0.01).setUserCol("id").setItemCol("pid").setRatingCol("purchasequantity")
+    val model = als.fit(training)
+    model.setColdStartStrategy("drop")
+    val predictions = model.transform(test)
+    val evaluator = new RegressionEvaluator().setMetricName("rmse").setLabelCol("purchasequantity").setPredictionCol("prediction")
+    val rmse = evaluator.evaluate(predictions)
+    println(s"Root-mean-square error = $rmse")
+    // Create 5 recommendations
+    val prodRecsForUser = model.recommendForAllUsers(5)
 
   }
 }
