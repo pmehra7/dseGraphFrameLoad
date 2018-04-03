@@ -167,6 +167,7 @@ Italic: Clustering Column
 ***2. Vertices:***
 
 Each vertex label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
+
 |Product|Customer|Store|Offer|
 |-------|-------|-------|-------|
 |**chain**|**customer_id**|**chain**|**offer**|
@@ -183,7 +184,9 @@ Each vertex label is a column in this table; the properties avaiable on the vert
 
 
 ***3. Edges:***
+
 Each edge label is a column in this table; the properties avaiable on the vertex are indicated via the rows.
+
 |visits|offer_used|purchases|
 |--------------|--------------|--------------|
 |date|date|date|
