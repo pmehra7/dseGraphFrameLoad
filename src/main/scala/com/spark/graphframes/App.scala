@@ -17,7 +17,6 @@ object App {
     val spark = SparkSession
       .builder
       .appName("Graph Load Application")
-      .config("spark.cassandra.input.consistency.level","LOCAL_QUORUM")
       .enableHiveSupport()
       .getOrCreate()
 
@@ -65,9 +64,9 @@ object App {
     // Read CSV Files
     // .option("inferSchema", "true") --> Use this if you do not want to define schema explicitly
 
-    val transactions = spark.sqlContext.read.format("com.databricks.spark.csv").option("header", "true").schema(transactionsSchema).load("dsefs:///data/transactions.csv")
-    val offer = spark.sqlContext.read.format("com.databricks.spark.csv").option("header", "true").schema(offersSchema).load("dsefs:///data/offers.csv")
-    val history = spark.sqlContext.read.format("com.databricks.spark.csv").option("header", "true").schema(historySchema).load("dsefs:///data/trainHistory.csv")
+    val transactions = spark.sqlContext.read.format("csv").option("header", "true").schema(transactionsSchema).load("dsefs:///data/transactions.csv")
+    val offer = spark.sqlContext.read.format("csv").option("header", "true").schema(offersSchema).load("dsefs:///data/offers.csv")
+    val history = spark.sqlContext.read.format("csv").option("header", "true").schema(historySchema).load("dsefs:///data/trainHistory.csv")
 
 
     // WRITE OUT VERTICES
