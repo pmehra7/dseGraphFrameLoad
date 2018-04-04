@@ -75,38 +75,10 @@ $ put /path/to/trainHistory.csv /data/
 
 *****3.a: Gremlin Console*****
 
-1. Start the Gremlin console using the `dse` command and passing the additional command `gremlin-console`:
-```sh
-$ bin/dse gremlin-console
-         \,,,/
-         (o o)
------oOOo-(3)-oOOo-----
-plugin activated: tinkerpop.server
-plugin activated: tinkerpop.utilities
-plugin activated: tinkerpop.tinkergraph
-gremlin>
+Use gremlin console to create the graph and insert the schema:
+
 ```
-
-2. [Create a new graph] to store the data and alias a graph traversal to run queries. If you are reusing a graph that you previously created, [drop the graph schema and data]. In this example, the graph name is `Test_Graph`. If you change the graph name, then rename the graphName variable on line 15 in `App.scala`.
-
-```sh
-gremlin> system.graph('Test_Graph').create()
-==>null
-```
-
-[Create a new graph]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/graph/using/createGraphGremlin.html> 
-
-[drop the graph schema and data]:<https://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/graph/using/dropSchemaDataGremlin.html>
-
-3. On the remote Gremlin Server, set the timeout value to max. Use this setting to ensure that script processing will complete.
-
-```sh
-gremlin> :remote config timeout max 
-```
-
-4. Run `schema.groovy` from the resources directory to create the graph schema. 
-```sh
-gremlin> :load /path/to/dseGraphFrameLoad/src/main/resources/schema.groovy
+$ dse gremlin-console -e /path/to/dseGraphFrameLoad/blob/master/src/main/resources/schema.groovy
 ```
 
 *****3.b: DSE Studio Notebook*****
