@@ -28,7 +28,7 @@ Moving forward, this README assumes you have successfully set up DSE 6.0.
 Clone this repository on a machine in an environment you have cloning access:
 
 ```sh
-$ git clone git@github.com:pmehra7/dseGraphFrameLoad.git
+$ git clone https://github.com/pmehra7/dseGraphFrameLoad.git
 ```
 
 Navigate to the parent directory and build this project:
