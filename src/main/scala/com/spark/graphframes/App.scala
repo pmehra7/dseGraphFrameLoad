@@ -144,6 +144,7 @@ object App {
 
     // COLLABORATIVE FILTERING EXAMPLE 
     // Can comment out this out if only loading data
+    /*
     transactions.createOrReplaceTempView("makeFeatures")
     val prodList = spark.sql("SELECT row_number() over (order by chain, company, brand, dept, category) as pid, chain, company, brand, dept, category FROM (SELECT DISTINCT chain, company, brand, dept, category FROM makeFeatures) derived")
     transactions.createOrReplaceTempView("prodList")
@@ -160,6 +161,6 @@ object App {
     println(s"Root-mean-square error = $rmse")
     // Create 5 recommendations
     val prodRecsForUser = model.recommendForAllUsers(5)
-
+    */
   }
 }
