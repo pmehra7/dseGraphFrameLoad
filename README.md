@@ -37,6 +37,14 @@ $ cd dseGraphFrameLoad/
 $ mvn clean package
 ```
 
+Note: If the DSE6 repo is not in the Maven Repo, go to the `dseGraphFrameLoad/src/main/resources/` directory and follow the instructions in `dse-eap6-dep.txt` to install the dependancies. 
+
+The error might look like: 
+
+```sh
+[ERROR] Failed to execute goal on project dseGraphFrames: Could not resolve dependencies for project 
+```
+
 ***3. Download Data***
 
 Download the data from Kaggle: https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data and download the following files: 
