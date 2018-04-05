@@ -50,7 +50,7 @@ schema.vertexLabel("store").
        partitionKey("chain").
        properties(
         "market"
-).create()
+).ifNotExists().create()
 
 schema.vertexLabel("customer").
        partitionKey("customer_id").
