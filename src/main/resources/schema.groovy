@@ -1,3 +1,6 @@
+system.graph('Test_Graph').create()
+:remote config alias g Test_Graph.g
+
 // Property Keys
 
 schema.propertyKey("offer").Text().create()
