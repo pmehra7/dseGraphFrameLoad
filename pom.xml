@@ -30,6 +30,12 @@
             <groupId>com.datastax.dse</groupId>
             <artifactId>dse-graph-frames</artifactId>
             <version>${dse.version}</version>
+            <exclusions>
+              <exclusion>  
+                <groupId>org.apache.directory</groupId>
+                <artifactId>api</artifactId>
+              </exclusion>
+             </exclusions> 
         </dependency>
     </dependencies>
 
