@@ -30,19 +30,13 @@
             <groupId>com.datastax.dse</groupId>
             <artifactId>dse-graph-frames</artifactId>
             <version>${dse.version}</version>
-            <exclusions>
-              <exclusion>  
-                <groupId>org.apache.directory.api</groupId>
-                <artifactId>*</artifactId>
-              </exclusion>
-             </exclusions> 
         </dependency>
     </dependencies>
 
     <repositories>
         <repository>
             <id>DataStax-Repo</id>
-            <url>https://repo.datastax.com/public-repos/</url>
+            <url>https://datastax.artifactoryonline.com/datastax/dse/</url>
         </repository>
     </repositories>
 
