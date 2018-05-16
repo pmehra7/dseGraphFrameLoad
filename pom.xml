@@ -5,7 +5,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
   <properties>
-      <dse.version>6.0.0-eap1</dse.version>
+      <dse.version>6.0.0</dse.version>
       <scala.version>2.11.8</scala.version>
       <scala.main.version>2.11</scala.main.version>
       <cassandra.version>4.0</cassandra.version>
@@ -25,6 +25,11 @@
             <artifactId>dse-spark-dependencies</artifactId>
             <version>${dse.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.dse</groupId>
+            <artifactId>dse-graph-frames</artifactId>
+            <version>${dse.version}</version>
         </dependency>
     </dependencies>
 
