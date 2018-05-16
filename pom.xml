@@ -36,7 +36,8 @@
     <repositories>
         <repository>
             <id>DataStax-Repo</id>
-            <url>https://datastax.artifactoryonline.com/datastax/dse/</url>
+            <url>https://repo.datastax.com/public-repos/</url>
+            <!--<url>https://datastax.artifactoryonline.com/datastax/dse/</url>-->
         </repository>
     </repositories>
 
