@@ -25,6 +25,12 @@
             <artifactId>dse-spark-dependencies</artifactId>
             <version>${dse.version}</version>
             <scope>provided</scope>
+            <exclusions>
+              <exclusion>  
+                <groupId>org.apache.directory.api</groupId>
+                <artifactId>*</artifactId>
+               </exclusion>
+             </exclusions> 
         </dependency>
         <dependency>
             <groupId>com.datastax.dse</groupId>
