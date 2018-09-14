@@ -116,7 +116,7 @@ $ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT
 
 I used the following spark submit parameters on m4.4xlarge machines: 
 ```sh
-$ dse spark-submit --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT.jar --executor-memory=22G
+$ dse spark-submit --executor-memory=22G --class com.spark.graphframes.App dseGraphFrames-1.0-SNAPSHOT.jar 
 ```
 
 ### C. Graph Model
