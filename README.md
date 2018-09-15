@@ -34,7 +34,7 @@ $ git clone https://github.com/pmehra7/dseGraphFrameLoad.git
 Navigate to the parent directory and build this project:
 ```sh
 $ cd dseGraphFrameLoad/
-$ mvn clean package
+$ mvn clean install
 ```
 
 Note: If the DSE6 repo is not in the Maven Repo, go to the `dseGraphFrameLoad/src/main/resources/` directory and follow the instructions in `dse-eap6-dep.txt` to install the dependancies. 
