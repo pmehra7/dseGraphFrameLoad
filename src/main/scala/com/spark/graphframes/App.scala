@@ -1,11 +1,9 @@
 package com.spark.graphframes
 
 import com.datastax.bdp.graph.spark.graphframe._
-import org.apache.spark.ml.recommendation.ALS
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-import org.apache.spark.ml.evaluation.RegressionEvaluator
 
 
 object App {
@@ -21,7 +19,6 @@ object App {
       .getOrCreate()
 
     val g = spark.dseGraph(graphName)
-
 
     // Create Schemas for DataSets
     def transactionsSchema():StructType = {
@@ -77,7 +74,9 @@ object App {
     val customers = tx.select(col("id") as "customer_id").withColumn("~label", lit("customer"))
 
     println("\nWriting Customer Vertices")
-    g.updateVertices(customers)
+
+    // Disabling caching and specifying that this DataFrame maps to to the customer vertex
+    g.updateVertices(customers, Seq("customer"), false)
 
     // Offer Vertex: Use the offers DataSet
     val offers = offer.select(
@@ -90,7 +89,7 @@ object App {
     ).withColumn("~label", lit("offer"))
 
     println("\nWriting Offer Vertices")
-    g.updateVertices(offers)
+    g.updateVertices(offers, Seq("offer"), false)
 
     // Product Vertex: Use part of the transactions DataSet
     val products = transactions.select(
@@ -108,7 +107,7 @@ object App {
      ).withColumn("~label", lit("product"))
 
     println("\nWriting Product Vertices")
-    g.updateVertices(products)
+    g.updateVertices(products, Seq("product"), false)
 
     // Store Vertex: Select distinct chains from transactions and join to history where you select chain, market
     val tempA = transactions.select(transactions("chain")).distinct
@@ -121,7 +120,7 @@ object App {
     ).withColumn("~label", lit("store"))
 
     println("\nWriting Store Vertices")
-    g.updateVertices(stores)
+    g.updateVertices(stores, Seq("store"), false)
 
     // WRITE OUT EDGES
 
@@ -129,18 +128,19 @@ object App {
     val txEdge = transactions.withColumn("srcLabel", lit("customer")).withColumnRenamed("id", "customer_id").withColumn("dstLabel", lit("store")).withColumn("edgeLabel", lit("visits"))
     val custToStore = txEdge.select(g.idColumn(col("srcLabel"), col("customer_id")) as "src", g.idColumn(col("dstLabel"), col("chain")) as "dst", col("edgeLabel") as "~label", col("date") as "date")
     println("\nWriting Visit Vertices")
-    g.updateEdges(custToStore)
+    // Disabling caching
+    g.updateEdges(custToStore, false)
 
     //val txHistory = history.join(offer,"offer")
     val offerEdge = history.withColumn("srcLabel", lit("customer")).withColumnRenamed("id", "customer_id").withColumn("dstLabel", lit("offer")).withColumn("edgeLabel", lit("offer_used"))
     val custToOffer = offerEdge.select(g.idColumn(col("srcLabel"), col("customer_id")) as "src", g.idColumn(col("dstLabel"), col("offer")) as "dst", col("edgeLabel") as "~label", col("date") as "date", col("repeattrips") as "repeattrips", col("repeater") as "repeater")
     println("\nWriting Offer Used Vertices")
-    g.updateEdges(custToOffer)
+    g.updateEdges(custToOffer, false)
 
     val purchaseEdge = transactions.withColumn("srcLabel", lit("customer")).withColumnRenamed("id", "customer_id").withColumn("dstLabel", lit("product")).withColumn("edgeLabel", lit("purchases"))
     val custToProduct = purchaseEdge.select(g.idColumn(col("srcLabel"), col("customer_id")) as "src", g.idColumn(col("dstLabel"), col("brand"), col("category"), col("chain"), col("company"), col("dept")) as "dst", col("edgeLabel") as "~label", col("date") as "date", col("purchasequantity") as "purchasequantity", col("purchaseamount") as "purchaseamount")
     println("\nWriting Purchases Vertices")
-    g.updateEdges(custToProduct)
+    g.updateEdges(custToProduct, false)
 
     // COLLABORATIVE FILTERING EXAMPLE 
     // Can comment out this out if only loading data
